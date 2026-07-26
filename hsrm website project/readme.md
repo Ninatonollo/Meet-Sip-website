@@ -30,7 +30,7 @@ The illustrations used in this project were adapted from reference material orig
 
 Original references:
 - Pinterest reference 1: [[Link]](https://de.pinterest.com/pin/390687336479321585/  )
-- Pinterest reference 2: [Link]https://de.pinterest.com/pin/784541197615781759/  
+- Pinterest reference 2: [Link] (https://de.pinterest.com/pin/784541197615781759/  )
 
 ## Team
 
