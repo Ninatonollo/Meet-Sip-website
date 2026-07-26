@@ -20,6 +20,13 @@ The goal was to create a platform that encourages students to connect through re
 - Student-focused user experience
 - Café meetup platform concept
 
+## My Contribution
+
+* Developed the visual identity, including logo design and color system
+* Created UI design concepts with a focus on visual hierarchy and UX
+* Designed interactive elements to enhance user engagement
+* Edited visual assets and supported frontend implementation
+
 ## Design
 
 The interface was designed in Figma:https://www.figma.com/design/CHUyWwwj3sCNGuvVvbPpkh/Untitled?node-id=0-1&t=4DSARFBpTZE5iksf-1
