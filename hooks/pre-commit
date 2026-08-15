@@ -1,0 +1,54 @@
+#!/bin/bash
+
+if [ "$(uname)" == "Linux" ] || [ "$(uname)" == "Darwin" ]; then
+    # Bash-Skript für Linux/macOS
+    invalid_files=$(git diff --cached --name-only --diff-filter=A | grep -E '[^a-z0-9./-]' | grep -v ".DS_Store")
+
+    if [ -n "$invalid_files" ]; then
+        echo "Error: The following files have invalid names (only lowercase letters, numbers, hyphens, periods and slashes are allowed, no spaces):"
+        echo "$invalid_files"
+        exit 1
+    fi
+
+    invalid_dirs=$(git diff --cached --name-only --diff-filter=A | grep -Eo '^[^/]+(/[^/]+)*' | sort -u | grep -E '[^a-z0-9./-]')
+
+    if [ -n "$invalid_dirs" ]; then
+        echo "Error: The following directories have invalid names (only lowercase letters, numbers, hyphens, periods and slashes are allowed, no spaces):"
+        echo "$invalid_dirs"
+        exit 1
+    fi
+
+    if git diff --cached --name-only | grep -q ".DS_Store"; then
+        echo "Error: .DS_Store files should not be committed."
+        exit 1
+    fi
+elif [[ "$(uname)" =~ ^MINGW32_NT|^MINGW64_NT|^CYGWIN_NT ]]; then
+    # PowerShell-Skript für Windows
+    powershell -NoProfile -Command "
+    \$invalidFiles = git diff --cached --name-only --diff-filter=A | Where-Object { \$_ -notmatch '^[a-z0-9./-]+$' -and \$_ -ne '.DS_Store' }
+
+    if (\$invalidFiles) {
+        Write-Host 'Error: The following files have invalid names (only lowercase letters, numbers, hyphens, periods and slashes are allowed, no spaces):'
+        \$invalidFiles | ForEach-Object { Write-Host \$_ }
+        exit 1
+    }
+
+    \$invalidDirs = git diff --cached --name-only --diff-filter=A | Select-String -Pattern '^[^/]+(/[^/]+)*' | ForEach-Object { \$_ -match '(.*)' } | Sort-Object -Unique | Where-Object { \$_ -notmatch '^[a-z0-9./-]+$' }
+
+    if (\$invalidDirs) {
+        Write-Host 'Error: The following directories have invalid names (only lowercase letters, numbers, hyphens, periods and slashes are allowed, no spaces):'
+        \$invalidDirs | ForEach-Object { Write-Host \$_ }
+        exit 1
+    }
+
+    if (git diff --cached --name-only | Select-String -Pattern '.DS_Store') {
+        Write-Host 'Error: .DS_Store files should not be committed.'
+        exit 1
+    }
+    "
+else
+    echo "Unknown OS"
+    exit 1
+fi
+
+exit 0
